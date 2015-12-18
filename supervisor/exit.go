@@ -58,6 +58,5 @@ func (h *ExecExitEvent) Handle(e *Event) error {
 	if err := container.RemoveProcess(e.Pid); err != nil {
 		logrus.WithField("error", err).Error("containerd: find container for pid")
 	}
-	h.s.notifySubscribers(e)
 	return nil
 }

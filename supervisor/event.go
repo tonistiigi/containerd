@@ -63,6 +63,16 @@ type Event struct {
 	Stats         chan interface{}
 }
 
+// rpcEvent returns event for rpc listeners
+func (e *Event) rpcEvent() *Event {
+	return &Event{
+		Type:   e.Type,
+		ID:     e.ID,
+		Status: e.Status,
+		Pid:    e.Pid,
+	}
+}
+
 type Handler interface {
 	Handle(*Event) error
 }
@@ -79,6 +89,7 @@ func (e *commonEvent) Handle() {
 		return
 	}
 	err := h.Handle(e.data)
+	e.sv.notifySubscribers(e.data.rpcEvent())
 	if err != errDeferedResponse {
 		e.data.Err <- err
 		close(e.data.Err)
