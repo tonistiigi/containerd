@@ -68,6 +68,7 @@ func New(id, stateDir string, tasks chan *StartTask, oom bool) (*Supervisor, err
 		CreateCheckpointEventType: &CreateCheckpointEvent{s},
 		DeleteCheckpointEventType: &DeleteCheckpointEvent{s},
 		StatsEventType:            &StatsEvent{s},
+		SubscribeStatsEventType:   &SubscribeStatsEvent{s},
 		UnsubscribeStatsEventType: &UnsubscribeStatsEvent{s},
 		StopStatsEventType:        &StopStatsEvent{s},
 	}
