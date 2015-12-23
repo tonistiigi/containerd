@@ -242,8 +242,8 @@ func (s *apiServer) Events(r *types.EventsRequest, stream types.API_EventsServer
 	return nil
 }
 
-func (s *apiServer) GetStats(r *types.StatsRequest, stream types.API_GetStatsServer) error {
-	e := supervisor.NewEvent(supervisor.StatsEventType)
+func (s *apiServer) StreamStats(r *types.StatsRequest, stream types.API_StreamStatsServer) error {
+	e := supervisor.NewEvent(supervisor.SubscribeStatsEventType)
 	e.ID = r.Id
 	s.sv.SendEvent(e)
 	if err := <-e.Err; err != nil {
@@ -255,7 +255,7 @@ func (s *apiServer) GetStats(r *types.StatsRequest, stream types.API_GetStatsSer
 	defer func() {
 		ue := supervisor.NewEvent(supervisor.UnsubscribeStatsEventType)
 		ue.ID = e.ID
-		ue.Stats = e.Stats
+		ue.StatsStream = e.StatsStream
 		s.sv.SendEvent(ue)
 		if err := <-ue.Err; err != nil {
 			logrus.Errorf("Error unsubscribing %s: %v", r.Id, err)
@@ -263,7 +263,7 @@ func (s *apiServer) GetStats(r *types.StatsRequest, stream types.API_GetStatsSer
 	}()
 	for {
 		select {
-		case st := <-e.Stats:
+		case st := <-e.StatsStream:
 			pbSt, ok := st.(*types.Stats)
 			if !ok {
 				panic("invalid stats type from collector")
@@ -276,4 +276,21 @@ func (s *apiServer) GetStats(r *types.StatsRequest, stream types.API_GetStatsSer
 		}
 	}
 	return nil
+}
+
+func (s *apiServer) PullStats(ctx context.Context, r *types.PullStatsRequest) (*types.PullStatsResponse, error) {
+	res := &types.PullStatsResponse{
+		Stats: make(map[string]*types.Stats),
+	}
+	for _, id := range r.Ids {
+		e := supervisor.NewEvent(supervisor.StatsEventType)
+		e.ID = id
+		s.sv.SendEvent(e)
+		if err := <-e.Err; err != nil {
+			res.Errors = append(res.Errors, &types.StatError{Id: id, Error: err.Error()})
+			continue
+		}
+		res.Stats[id] = e.Stats
+	}
+	return res, nil
 }

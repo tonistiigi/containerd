@@ -389,7 +389,7 @@ var statsCommand = cli.Command{
 			Id: context.Args().First(),
 		}
 		c := getClient(context)
-		stream, err := c.GetStats(netcontext.Background(), req)
+		stream, err := c.StreamStats(netcontext.Background(), req)
 		if err != nil {
 			fatal(err.Error(), 1)
 		}

@@ -4,6 +4,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/docker/containerd/api/grpc/types"
 	"github.com/docker/containerd/runtime"
 	"github.com/opencontainers/specs"
 )
@@ -21,7 +22,8 @@ const (
 	UpdateContainerEventType  EventType = "updateContainer"
 	CreateCheckpointEventType EventType = "createCheckpoint"
 	DeleteCheckpointEventType EventType = "deleteCheckpoint"
-	StatsEventType            EventType = "events"
+	StatsEventType            EventType = "stats"
+	SubscribeStatsEventType   EventType = "subscribeStats"
 	UnsubscribeStatsEventType EventType = "unsubscribeStats"
 	StopStatsEventType        EventType = "stopStats"
 	OOMEventType              EventType = "oom"
@@ -60,7 +62,8 @@ type Event struct {
 	Checkpoint    *runtime.Checkpoint
 	Err           chan error
 	StartResponse chan StartResponse
-	Stats         chan interface{}
+	StatsStream   chan interface{}
+	Stats         *types.Stats
 }
 
 // rpcEvent returns event for rpc listeners

@@ -12,7 +12,8 @@ service API {
 	rpc ListCheckpoint(ListCheckpointRequest) returns (ListCheckpointResponse) {}
 	rpc State(StateRequest) returns (StateResponse) {}
 	rpc Events(EventsRequest) returns (stream Event) {}
-	rpc GetStats(StatsRequest) returns (stream Stats) {}
+	rpc StreamStats(StatsRequest) returns (stream Stats) {}
+	rpc PullStats(PullStatsRequest) returns (PullStatsResponse) {}
 }
 
 message CreateContainerRequest {
@@ -234,4 +235,18 @@ message Stats {
 
 message StatsRequest {
 	string id = 1;
+}
+
+message PullStatsRequest {
+	repeated string ids = 1;
+}
+
+message StatError {
+	string id = 1;
+	string error = 2;
+}
+
+message PullStatsResponse {
+	map<string, Stats> stats = 1;
+	repeated StatError errors = 2;
 }
