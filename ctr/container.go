@@ -385,20 +385,19 @@ var statsCommand = cli.Command{
 	Name:  "stats",
 	Usage: "get stats for running container",
 	Action: func(context *cli.Context) {
-		req := &types.StatsRequest{
-			Id: context.Args().First(),
+		req := &types.PullStatsRequest{
+			Ids: []string{context.Args().First()},
 		}
 		c := getClient(context)
-		stream, err := c.StreamStats(netcontext.Background(), req)
-		if err != nil {
-			fatal(err.Error(), 1)
-		}
 		for {
-			stats, err := stream.Recv()
+			resp, err := c.PullStats(netcontext.Background(), req)
 			if err != nil {
 				fatal(err.Error(), 1)
 			}
-			fmt.Println(stats)
+			for _, stats := range resp.Stats {
+				fmt.Println(stats)
+			}
+			time.Sleep(time.Second)
 		}
 	},
 }
