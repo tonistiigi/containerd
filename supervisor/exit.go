@@ -18,7 +18,7 @@ func (h *ExitEvent) Handle(e *Event) error {
 	if err != nil {
 		logrus.WithField("error", err).Error("containerd: get exit status")
 	}
-	logrus.WithFields(logrus.Fields{"pid": proc.ID(), "status": status}).Debug("containerd: process exited")
+	logrus.WithFields(logrus.Fields{"pid": proc.ID(), "status": status, "id": e.ID}).Debug("containerd: process exited")
 
 	// if the process is the the init process of the container then
 	// fire a separate event for this process
@@ -58,5 +58,6 @@ func (h *ExecExitEvent) Handle(e *Event) error {
 	if err := container.RemoveProcess(e.Pid); err != nil {
 		logrus.WithField("error", err).Error("containerd: find container for pid")
 	}
+	h.s.notifySubscribers(e)
 	return nil
 }
