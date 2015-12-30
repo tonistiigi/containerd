@@ -12,7 +12,7 @@ type ExitEvent struct {
 
 func (h *ExitEvent) Handle(e *Event) error {
 	start := time.Now()
-	logrus.WithFields(logrus.Fields{"pid": e.Pid, "status": e.Status}).
+	logrus.WithFields(logrus.Fields{"pid": e.Pid, "status": e.Status, "id": e.ID}).
 		Debug("containerd: process exited")
 	// is it the child process of a container
 	if info, ok := h.s.processes[e.Pid]; ok {
@@ -31,6 +31,7 @@ func (h *ExitEvent) Handle(e *Event) error {
 		}
 		return nil
 	}
+	e.ID = container.ID()
 	container.SetExited(e.Status)
 	ne := NewEvent(DeleteEventType)
 	ne.ID = container.ID()
