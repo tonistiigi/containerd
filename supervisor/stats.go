@@ -44,14 +44,14 @@ func (h *StopStatsEvent) Handle(e *Event) error {
 }
 
 func (h *StatsEvent) Handle(e *Event) error {
-	i, ok := h.s.containers[e.ID]
+	_, ok := h.s.containers[e.ID]
 	if !ok {
 		return ErrContainerNotFound
 	}
-	st, err := i.container.Stats()
-	if err != nil {
-		return err
-	}
-	e.Stats = convertToPb(st)
+	// st, err := i.container.Stats()
+	// if err != nil {
+	// 	return err
+	// }
+	// e.Stats = convertToPb(st)
 	return nil
 }
