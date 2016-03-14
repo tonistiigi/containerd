@@ -87,9 +87,12 @@ func (p *process) start() error {
 		return err
 	}
 	logPath := filepath.Join(cwd, "log.json")
-	args := []string{
-		"--log", logPath,
-		"--log-format", "json",
+	args := []string{}
+	if !p.state.Exec {
+		args = []string{
+			"--log", logPath,
+			"--log-format", "json",
+		}
 	}
 	if p.state.Exec {
 		args = append(args, "exec",
