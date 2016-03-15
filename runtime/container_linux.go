@@ -303,7 +303,7 @@ func (c *container) writeEventFD(root string, cfd, efd int) error {
 }
 
 func waitForStart(p *process, cmd *exec.Cmd) error {
-	for i := 0; i < 50; i++ {
+	for i := 0; i < 1000; i++ {
 		if _, err := p.getPidFromFile(); err != nil {
 			if os.IsNotExist(err) {
 				alive, err := isAlive(cmd)
