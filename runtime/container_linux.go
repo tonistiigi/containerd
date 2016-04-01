@@ -328,7 +328,10 @@ func (c *container) writeEventFD(root string, cfd, efd int) error {
 }
 
 func waitForStart(p *process, cmd *exec.Cmd) error {
-	for i := 0; i < 300; i++ {
+	for i := 0; ; i++ {
+		if i == 100 {
+			syscall.Kill(cmd.Process.Pid, syscall.SIGUSR1)
+		}
 		if _, err := p.getPidFromFile(); err != nil {
 			if os.IsNotExist(err) || err == errInvalidPidInt {
 				alive, err := isAlive(cmd)
@@ -369,7 +372,7 @@ func waitForStart(p *process, cmd *exec.Cmd) error {
 		}
 		return nil
 	}
-	return errNoPidFile
+	return nil
 }
 
 // isAlive checks if the shim that launched the container is still alive

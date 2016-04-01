@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
 	"strconv"
 	"sync"
@@ -151,6 +152,13 @@ func (p *process) start() error {
 		}
 		return err
 	}
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, syscall.SIGUSR1)
+		for range c {
+			syscall.Kill(cmd.Process.Pid, syscall.SIGUSR1)
+		}
+	}()
 	p.stdio.stdout.Close()
 	p.stdio.stderr.Close()
 	if err := cmd.Wait(); err != nil {
