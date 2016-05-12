@@ -67,6 +67,10 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.ProtoPackageIsVersion1
+
 type UpdateProcessRequest struct {
 	Id         string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Pid        string `protobuf:"bytes,2,opt,name=pid" json:"pid,omitempty"`
@@ -821,6 +825,10 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion2
+
 // Client API for API service
 
 type APIClient interface {
@@ -987,112 +995,166 @@ func RegisterAPIServer(s *grpc.Server, srv APIServer) {
 	s.RegisterService(&_API_serviceDesc, srv)
 }
 
-func _API_CreateContainer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_CreateContainer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateContainerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).CreateContainer(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).CreateContainer(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/CreateContainer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).CreateContainer(ctx, req.(*CreateContainerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_UpdateContainer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_UpdateContainer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateContainerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).UpdateContainer(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).UpdateContainer(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/UpdateContainer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).UpdateContainer(ctx, req.(*UpdateContainerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_Signal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_Signal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SignalRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).Signal(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).Signal(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/Signal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).Signal(ctx, req.(*SignalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_UpdateProcess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_UpdateProcess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateProcessRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).UpdateProcess(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).UpdateProcess(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/UpdateProcess",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).UpdateProcess(ctx, req.(*UpdateProcessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_AddProcess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_AddProcess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddProcessRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).AddProcess(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).AddProcess(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/AddProcess",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).AddProcess(ctx, req.(*AddProcessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_CreateCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_CreateCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCheckpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).CreateCheckpoint(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).CreateCheckpoint(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/CreateCheckpoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).CreateCheckpoint(ctx, req.(*CreateCheckpointRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_DeleteCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_DeleteCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteCheckpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).DeleteCheckpoint(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).DeleteCheckpoint(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/DeleteCheckpoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).DeleteCheckpoint(ctx, req.(*DeleteCheckpointRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_ListCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_ListCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListCheckpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).ListCheckpoint(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).ListCheckpoint(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/ListCheckpoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).ListCheckpoint(ctx, req.(*ListCheckpointRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _API_State_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_State_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).State(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).State(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/State",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).State(ctx, req.(*StateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _API_Events_Handler(srv interface{}, stream grpc.ServerStream) error {
@@ -1116,16 +1178,22 @@ func (x *aPIEventsServer) Send(m *Event) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _API_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _API_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StatsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(APIServer).Stats(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(APIServer).Stats(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/types.API/Stats",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).Stats(ctx, req.(*StatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _API_serviceDesc = grpc.ServiceDesc{
