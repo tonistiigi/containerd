@@ -544,7 +544,7 @@ var unpackCommand = cli.Command{
 		for _, image := range images {
 			if image.Target().Digest == dgst {
 				fmt.Printf("unpacking %s (%s)...", dgst, image.Target().MediaType)
-				if err := image.Unpack(ctx, context.String("snapshotter")); err != nil {
+				if err := image.Unpack(ctx, context.String("snapshotter"), ""); err != nil {
 					fmt.Println()
 					return err
 				}

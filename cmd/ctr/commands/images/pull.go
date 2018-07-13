@@ -43,7 +43,7 @@ command. As part of this process, we do the following:
 		cli.StringSliceFlag{
 			Name:  "platform",
 			Usage: "Pull content from a specific platform",
-			Value: &cli.StringSlice{platforms.Default()},
+			Value: &cli.StringSlice{},
 		},
 		cli.BoolFlag{
 			Name:  "all-platforms",
@@ -78,11 +78,21 @@ command. As part of this process, we do the following:
 		log.G(ctx).WithField("image", ref).Debug("unpacking")
 
 		// TODO: Show unpack status
-		fmt.Printf("unpacking %s...\n", img.Target().Digest)
-		err = img.Unpack(ctx, context.String("snapshotter"))
-		if err == nil {
-			fmt.Println("done")
+
+		p := context.StringSlice("platform")
+		if len(p) == 0 {
+			p = append(p, platforms.Default())
 		}
-		return err
+
+		for _, platform := range p {
+			fmt.Printf("unpacking %s %s...\n", platform, img.Target().Digest)
+			err = img.Unpack(ctx, context.String("snapshotter"), platform)
+			if err != nil {
+				return err
+			}
+		}
+
+		fmt.Println("done")
+		return nil
 	},
 }

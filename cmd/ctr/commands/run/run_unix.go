@@ -69,7 +69,7 @@ func NewContainer(ctx gocontext.Context, client *containerd.Client, context *cli
 			return nil, err
 		}
 		if !unpacked {
-			if err := image.Unpack(ctx, snapshotter); err != nil {
+			if err := image.Unpack(ctx, snapshotter, ""); err != nil {
 				return nil, err
 			}
 		}

@@ -103,7 +103,7 @@ If foobar.tar contains an OCI ref named "latest" and anonymous ref "sha256:deadb
 		for _, img := range imgs {
 			// TODO: Show unpack status
 			fmt.Printf("unpacking %s (%s)...", img.Name(), img.Target().Digest)
-			err = img.Unpack(ctx, context.String("snapshotter"))
+			err = img.Unpack(ctx, context.String("snapshotter"), "")
 			if err != nil {
 				return err
 			}
