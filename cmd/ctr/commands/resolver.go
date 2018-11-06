@@ -18,9 +18,13 @@ package commands
 
 import (
 	"bufio"
+	"bytes"
 	gocontext "context"
 	"crypto/tls"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
@@ -51,11 +55,19 @@ func passwordPrompt() (string, error) {
 	return string(line), nil
 }
 
+type authConfig struct {
+	Auths map[string]authRecord `json:"auths"`
+}
+
+type authRecord struct {
+	Auth string `json:"auth"`
+}
+
 // GetResolver prepares the resolver from the environment and options
 func GetResolver(ctx gocontext.Context, clicontext *cli.Context) (remotes.Resolver, error) {
 	username := clicontext.String("user")
 	var secret string
-	if i := strings.IndexByte(username, ':'); i > 0 {
+	if i := strings.IndexByte(username, ':'); !strings.HasPrefix(username, "file:") && i > 0 {
 		secret = username[i+1:]
 		username = username[0:i]
 	}
@@ -63,7 +75,18 @@ func GetResolver(ctx gocontext.Context, clicontext *cli.Context) (remotes.Resolv
 		PlainHTTP: clicontext.Bool("plain-http"),
 		Tracker:   PushTracker,
 	}
-	if username != "" {
+	var cfg authConfig
+	if strings.HasPrefix(username, "file:") {
+		username = strings.TrimPrefix(username, "file:")
+		dt, err := ioutil.ReadFile(username)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(dt, &cfg); err != nil {
+			return nil, err
+		}
+	} else if username != "" {
 		if secret == "" {
 			fmt.Printf("Password: ")
 
@@ -100,6 +123,22 @@ func GetResolver(ctx gocontext.Context, clicontext *cli.Context) (remotes.Resolv
 	}
 
 	credentials := func(host string) (string, string, error) {
+		if host == "registry-1.docker.io" {
+			host = "https://index.docker.io/v1/"
+		}
+		ac, ok := cfg.Auths[host]
+		if ok {
+			dt, err := base64.StdEncoding.DecodeString(ac.Auth)
+			if err != nil {
+				return "", "", err
+			}
+			parts := bytes.SplitN(dt, []byte(":"), 2)
+			if len(parts) != 2 {
+				return "", "", errors.Errorf("invalid auth config")
+			}
+			username = string(parts[0])
+			secret = string(parts[1])
+		}
 		// Only one host
 		return username, secret, nil
 	}
