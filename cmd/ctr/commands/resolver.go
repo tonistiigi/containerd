@@ -86,6 +86,12 @@ func GetResolver(ctx gocontext.Context, clicontext *cli.Context) (remotes.Resolv
 		if err := json.Unmarshal(dt, &cfg); err != nil {
 			return nil, err
 		}
+		if len(cfg.Auths) == 0 {
+			cfg.Auths = map[string]authRecord{}
+			if err := json.Unmarshal(dt, &cfg.Auths); err != nil {
+				return nil, err
+			}
+		}
 	} else if username != "" {
 		if secret == "" {
 			fmt.Printf("Password: ")
